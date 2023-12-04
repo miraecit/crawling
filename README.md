@@ -1,6 +1,6 @@
 # Crawl
 
-구글에서 개발한 **puppeteer** 를 사용하여 뉴스 매체인 **Guardian**, **Reuters**, **Mining**, **Wall street journal** 의 내용을 크롤링 할 수 있는 학습용 예제 소스입니다.
+구글에서 개발한 **puppeteer** 를 사용하여 뉴스 매체인 **Guardian**, **Reuters**, **Mining**, 의 내용을 크롤링 할 수 있는 학습용 예제 소스입니다.
 
 
 # Setup
