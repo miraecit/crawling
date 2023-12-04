@@ -2,17 +2,17 @@
 import puppeteer from 'puppeteer';
 import mysql from 'mysql2/promise';
 import { load } from 'cheerio';
-
-const pool = mysql.createPool({
-    "host":            "localhost",
-    "user":            "",          // 데이터베이스 아이디
-    "password":        "",          // 데이터베이스 비밀번호
-    "database":        "",         // 데이터베이스
-    "connectionLimit": 5                
-})
-
+import 'dotenv'
 
 (async () => {
+    const pool = mysql.createPool({
+        "host":            "localhost",
+        "user":            process.env.DB_ID,
+        "password":        process.env.DB_PW,
+        "database":        process.env.DB_SCHMA,
+        "connectionLimit": 5
+    })
+
     const brw = await puppeteer.launch({headless: 'new', args: ['--no-sandbox', '--disable-setuid-sandbox']})
     const pge = await brw.newPage()
 
