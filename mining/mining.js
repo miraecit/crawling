@@ -3,7 +3,7 @@ import puppeteer  from 'puppeteer';
 import mysql      from 'mysql2/promise';
 import { load }   from 'cheerio';
 import chalk from 'chalk';
-import 'dotenv'
+import 'dotenv/config'
 
 (async () => {
     const pool = mysql.createPool({
@@ -18,6 +18,7 @@ import 'dotenv'
     const pge  = await brw.newPage()
     const srcs = ['copper', 'gold', 'lithium', 'nickel', 'silver']
 
+    const connection = await pool.getConnection(async conn => conn)
     for (const src of srcs) {
         let pagenation = 1 
 
@@ -45,32 +46,40 @@ import 'dotenv'
                 const title = $(element).find('a')
                 const href = title.attr('href')
                 
-                const { content, created, url } = await crawlArticle(href)
-                const connection = await pool.getConnection(async conn => conn)
+                const { content, created, url } = await crawlArticle(brw, href)
     
                 try {
-                    if (title !== "" && content !== "") {
-                        const sqlStatement = `INSERT INTO news (origin, title, content, category, url, created) VALUES (?, ?, ?, ?, ?, ?);`;
-                        await connection.query(sqlStatement, ['mining', title.text(), content, 'copper', url, created])
+                    if (!(await isExists(connection, url))) { 
+                        if (title !== "" && content !== "") {
+                            const sqlStatement = `INSERT INTO news (origin, title, content, category, url, created) VALUES (?, ?, ?, ?, ?, ?);`;
+                            await connection.query(sqlStatement, ['mining', title.text(), content, 'copper', url, created])
+                        }
                     }
+                    else { console.log('duplicate') }
                 }
                 catch (err) { 
                     console.log('DB EXCEPTION=' + err) 
                 }
     
-                finally { connection.release() }
                 await delay(10000)
             }
             
             pagenation++
         }
     }
+    connection.release()
 
     await pge.close()
     await brw.close()
 })();
 
-async function crawlArticle (url) {
+async function isExists (connection, url) {
+    const sqlStatement = `SELECT COUNT(*) as CNT FROM news WHERE url='${url}';`;
+    const result = await connection.query(sqlStatement)
+    return result[0][0].CNT !== 0
+}
+
+async function crawlArticle (brw, url) {
     const page = await brw.newPage()
     await page.goto(url)
     const html = await page.content()
