@@ -61,7 +61,7 @@ import 'dotenv/config'
                     console.log('DB EXCEPTION=' + err) 
                 }
     
-                await delay(10000)
+                await delay(10100)
             }
             
             pagenation++
