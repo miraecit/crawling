@@ -82,7 +82,7 @@ async function crawlArticle (brw, url) {
     await delay(2000)
     
     try {
-        await articlePage.waitForSelector('body > main > article', { visible: true, timeout: 4000 })
+        await articlePage.waitForSelector('body > main > article', { visible: true, timeout: 3000 })
     }
     catch (err) { 
         articlePage.close()
