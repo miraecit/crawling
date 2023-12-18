@@ -74,8 +74,8 @@ async function isEndPage (pge, url) {
 
 async function login (pge) {
     await pge.goto('https://www.reuters.com/account/sign-in?redirect=https://www.reuters.com/news/archive/worldnNews?view=page&page=1&pageSize=10')
-    await pge.type('#email', '',    {delay: 80})    // 로이터 이메일
-    await pge.type('#password', '', {delay: 80})    // 로이터 비밀번호
+    await pge.type('#email', '',    {delay: 90})    // 로이터 이메일
+    await pge.type('#password', '', {delay: 90})    // 로이터 비밀번호
     await pge.click('.sign-in-form__sign-in-btn__2jvFh')
 }
 
