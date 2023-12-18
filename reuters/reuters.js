@@ -11,7 +11,7 @@ const pool = mysql.createPool({
     "password":        process.env.DB_PW,
     "database":        process.env.DB_SCHMA,
     "connectionLimit": 1
-})
+}) 
 
 let isRunning = false
 
